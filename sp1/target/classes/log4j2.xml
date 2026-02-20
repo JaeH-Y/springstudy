@@ -9,10 +9,20 @@
     </Appenders>
 
     <!-- Logger 설정 -->
+    <!-- Logger: 어떤 수준(level)으로 로그를 남길지 결정 -->
     <Loggers>
-        <Logger name="org.springframework" level="DEBUG" additivity="false">
+        <Logger name="org.springframework" level="INFO" additivity="false">
             <AppenderRef ref="console"/>
         </Logger>
+        
+        <!-- HikariCP의 로그 레벨을 조금 더 자세히 기록하도록 DEBUG 레벨로 낮춤 -->
+        <Logger name="com.zaxxer" level="DEBUG" additivity="false">
+			    <AppenderRef ref="console"/>
+				</Logger>
+				
+				<Logger name="org.zerock" level="DEBUG" additivity="false">
+			    <AppenderRef ref="console"/>
+				</Logger>
         
         <Root level="INFO">
             <AppenderRef ref="console"/>
