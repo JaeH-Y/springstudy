@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- <select> 등을 만들 때 자동 완성 기능 지원 -->
+
+<mapper namespace="org.zerock.mapper.BoardMapper"><!-- namespace = 반드시 매퍼 인터페이스와 동일한 이름을 사용해야함 -->
+
+	<!-- id는 반드시 메소드 이름과 일치 -->
+	<insert id="insert">
+		<!-- keyProperty: INSERT가 완료된 후, DB에서 조회한 PK 값을 저장할 객체(DTO)의 필드 이름을 지정
+				resultType: 조회할 키 값의 자바 타입을 지정
+				order: selectKey 태그를 언제 실행할 지(본문 실행 전, 후 선택) -->
+		<selectKey keyProperty="bno" resultType="Long" order="AFTER">
+			<!-- LAST_INSERT_ID: MySQL의 전용 구문, 가장 마지막 ID 읽어오기 -->
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		
+		INSERT INTO tbl_board(title, content, writer)
+		VALUES(#{title}, #{content}, #{writer})
+		
+	</insert>
+	
+	<!-- resultType: SQL 실행 결과(ResultSet)을 어떤 타입의 객체로 매핑할 것인지 지정 -->
+	<select id="selectOne" resultType="BoardDTO">
+		SELECT * FROM tbl_board WHERE bno = #{bno}
+	</select>
+	
+	<select id="listSearch" resultType="BoardDTO">
+		SELECT bno, title, writer, regdate 
+		FROM tbl_board
+		WHERE delflag = false
+		
+		<include refid="search"></include>
+		
+		ORDER BY bno DESC
+		LIMIT #{count} OFFSET #{skip}
+	</select>
+	
+	<select id="list2" resultType="BoardDTO">
+		SELECT bno, title, writer, regdate
+		FROM tbl_board
+		WHERE delflag = FALSE
+		ORDER BY bno DESC
+		LIMIT #{count} OFFSET #{skip}
+	</select>
+	
+	<select id="listCount" resultType="int">
+		SELECT count(bno)
+		FROM tbl_board
+		WHERE delflag = FALSE
+		<include refid="search"></include>
+	</select>
+	
+	<sql id="search">
+		<if test="types != null and keyword != null">
+			<foreach collection="types" item="type" open="AND (" close=")" separator="OR">
+				
+				<if test='type.equals("T")'>
+					title like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test='type.equals("C")'>
+					content like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test='type.equals("W")'>
+					writer like CONCAT('%', #{keyword}, '%')
+				</if>
+				
+			</foreach>
+		</if>
+	</sql>
+		
+	<!-- 논리적 삭제(컬럼값 변경: delflag = True) -->
+	<update id="removeOne">
+		UPDATE tbl_board
+		SET delflag = true
+		WHERE bno = #{bno}
+	</update>
+	
+	<update id="updateOne">
+		UPDATE tbl_board
+		SET title = #{title},
+		content = #{content},
+		updatedate = NOW(),
+		delflag = #{delFlag}
+		WHERE bno = #{bno}
+	</update>
+	
+</mapper>
