@@ -34,6 +34,10 @@
 	<!-- MVC관련 어노테이션을 해석 및 실행하도록 필요한 인프라 Bean을 자동 등록 -->
 	<mvc:annotation-driven/>
 	
+	<!-- /resources/**(모든) 로 시작하는 모든 요청은 /resources/ 폴더 내에 있는 정적 리소스들을 그대로 응답 -->
+	<!-- 컨트롤러를 거치지 않음 -->
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
+	
 	<!-- Controller만 Servlet-context, 나머지는 전부 root-context -->
 	<context:component-scan base-package="org.zerock.controller"/>
 	
@@ -42,5 +46,10 @@
     <property name="prefix" value="/WEB-INF/views/"/>
     <property name="suffix" value=".jsp"/>
 	</bean>
+	
+	<!-- Spring MVC에서 MultipartFile(파일 업로드)을 사용하기 위해 설정 -->
+	<bean id="multipartResolver"
+	class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+	
 	
 </beans>
