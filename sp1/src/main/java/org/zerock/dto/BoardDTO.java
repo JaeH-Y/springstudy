@@ -22,6 +22,8 @@ public class BoardDTO {
 	private LocalDateTime updateDate;
 	private boolean delFlag;
 	
+	private int replyCnt;
+	
 	
 	// 빌더 패턴 연습 및 테스트
 //	private static void testBuilder() {
