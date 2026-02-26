@@ -26,13 +26,15 @@
 	</select>
 	
 	<select id="listSearch" resultType="BoardDTO">
-		SELECT bno, title, writer, regdate 
-		FROM tbl_board
-		WHERE delflag = false
+		SELECT tb.bno AS bno, title, writer, regdate, count(RNO) AS replyCnt
+		FROM TBL_BOARD AS tb
+		LEFT JOIN TBL_REPLY AS tr ON tb.BNO = tr.BNO
+		WHERE tb.DELFLAG = FALSE
 		
 		<include refid="search"></include>
 		
-		ORDER BY bno DESC
+		GROUP BY tb.bno
+		ORDER BY tb.bno DESC
 		LIMIT #{count} OFFSET #{skip}
 	</select>
 	
