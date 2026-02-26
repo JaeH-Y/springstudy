@@ -12,7 +12,7 @@
 <body>
 	<!-- Top Navbar -->
   <nav class="navbar navbar-expand-lg navbar-custom px-4">
-    <a class="navbar-brand" href="#">AdminPanel</a>
+    <a class="navbar-brand" href="${pageContext.request.contextPath}/board/list">AdminPanel</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
