@@ -43,7 +43,10 @@
 						<c:forEach var="board" items="${dto.boardDTOList}">
 							<tr data-bno="${board.bno}">
 								<td><a class="a-read" href="${pageContext.request.contextPath}/board/read/${board.bno}"><c:out value="${board.bno}"/></a></td>
-								<td><c:out value="${board.title}" /></td>
+								<td>
+								<c:out value="${board.title}" />
+								<span style="color: blue;">[<c:out value="${board.replyCnt}"/>]</span>
+								</td>
 								<td><c:out value="${board.writer}" /></td>
 								<td><c:out value="${board.regDate}" /></td>
 							</tr>
